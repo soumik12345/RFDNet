@@ -1,0 +1,5 @@
+venv/
+.idea/
+rfdnet/__pycache__/
+rfdnet/model/__pycache__/
+test.py
