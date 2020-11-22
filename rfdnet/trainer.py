@@ -1,6 +1,7 @@
 import os
 import tensorflow as tf
 from .model import RFDNet
+from .utils import lr_scheduler
 from .dataloader import SRDataLoader
 from wandb.keras import WandbCallback
 
@@ -45,7 +46,8 @@ class Trainer:
                     checkpoint_path, 'rfdnet_best.h5'
                 ), monitor='loss', mode='min', period=1,
                 save_best_only=True
-            ), WandbCallback()
+            ), WandbCallback(),
+            tf.keras.callbacks.LearningRateScheduler(lr_scheduler),
         ]
         self.model.fit(
             self.train_dataset, epochs=epochs,
