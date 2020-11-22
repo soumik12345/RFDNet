@@ -18,12 +18,13 @@ class Trainer:
     def build_dataset(
             self, dataset_url=None, crop_size=300, image_limiter=None,
             downsample_factor=3, batch_size=8, buffer_size=1024):
-        self.train_dataset = SRDataLoader(
+        train_dataloader = SRDataLoader(
             dataset_url=dataset_url, crop_size=crop_size,
             downsample_factor=downsample_factor, image_limiter=image_limiter,
             batch_size=batch_size, buffer_size=buffer_size
-        ).make_dataset()
-        print('Dataset Size:', len(self.train_dataset))
+        )
+        self.train_dataset = train_dataloader.make_dataset()
+        print('Number of Images:', len(train_dataloader))
         self.batch_size = batch_size
 
     def build_model(self, features=64, filters=64, scale_factor=3):
