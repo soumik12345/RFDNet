@@ -1,16 +1,15 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+from rfdnet.utils import init_wandb
+from rfdnet import RFDNet, Trainer
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+init_wandb(
+    project_name='rfdnet', experiment_name='div2k_train',
+    wandb_api_key='cf0947ccde62903d4df0742a58b8a54ca4c11673'
+)
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+trainer = Trainer()
+trainer.build_dataset(
+    dataset_url='http://data.vision.ee.ethz.ch/cvl/DIV2K/DIV2K_train_HR.zip'
+)
+trainer.compile()
+trainer.train()

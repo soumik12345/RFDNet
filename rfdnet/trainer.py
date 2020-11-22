@@ -2,6 +2,7 @@ import os
 import tensorflow as tf
 from .model import RFDNet
 from .dataloader import SRDataLoader
+from wandb.keras import WandbCallback
 
 
 class Trainer:
@@ -12,7 +13,9 @@ class Trainer:
         self.loss_function = None
         self.optimizer = None
 
-    def build_dataset(self, dataset_url=None, crop_size=300, downsample_factor=3, batch_size=8, buffer_size=1024):
+    def build_dataset(
+            self, dataset_url=None, crop_size=300,
+            downsample_factor=3, batch_size=8, buffer_size=1024):
         self.train_dataset = SRDataLoader(
             dataset_url=dataset_url, crop_size=crop_size,
             downsample_factor=downsample_factor,
@@ -31,15 +34,17 @@ class Trainer:
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
         self.model.compile(optimizer=self.optimizer, loss=self.loss_function)
 
-    def train(self, epochs=100, checkpoint_path='./chekpoints'):
+    def train(self, epochs=100, checkpoint_path='./checkpoints'):
         callbacks = [
-            tf.keras.callbacks.EarlyStopping(monitor='loss', patience=10),
+            tf.keras.callbacks.EarlyStopping(
+                monitor='loss', patience=10
+            ),
             tf.keras.callbacks.ModelCheckpoint(
                 filepath=os.path.join(
                     checkpoint_path, 'rfdnet_best.h5'
                 ), monitor='loss', mode='min', period=1,
                 save_best_only=True
-            )
+            ), WandbCallback()
         ]
         self.model.fit(
             self.train_dataset, epochs=epochs, callbacks=callbacks
