@@ -55,5 +55,5 @@ class Trainer:
         ]
         self.model.fit(
             self.train_dataset, epochs=epochs, callbacks=callbacks,
-            steps_per_epoch=self.batch_size // epochs
+            steps_per_epoch=epochs // self.batch_size
         )
