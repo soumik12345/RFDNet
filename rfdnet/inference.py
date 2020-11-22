@@ -42,5 +42,4 @@ class Inferer:
         )
         output_image = Image.fromarray(np.uint8(output_image))
         original_image = Image.fromarray(np.uint8(original_image))
-        original_image_bilinear = original_image.resize(output_image.size, Image.BICUBIC)
-        return original_image_bilinear, output_image
+        return original_image, output_image
