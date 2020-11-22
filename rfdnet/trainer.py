@@ -13,15 +13,18 @@ class Trainer:
         self.train_dataset = None
         self.loss_function = None
         self.optimizer = None
+        self.batch_size = None
 
     def build_dataset(
-            self, dataset_url=None, crop_size=300, image_limiter=800,
+            self, dataset_url=None, crop_size=300, image_limiter=None,
             downsample_factor=3, batch_size=8, buffer_size=1024):
         self.train_dataset = SRDataLoader(
             dataset_url=dataset_url, crop_size=crop_size,
             downsample_factor=downsample_factor, image_limiter=image_limiter,
             batch_size=batch_size, buffer_size=buffer_size
         ).make_dataset()
+        print('Dataset Size:', len(self.train_dataset))
+        self.batch_size = batch_size
 
     def build_model(self, features=64, filters=64, scale_factor=3):
         self.model = RFDNet(
@@ -36,7 +39,7 @@ class Trainer:
             learning_rate=learning_rate, epsilon=1e-8)
         self.model.compile(optimizer=self.optimizer, loss=self.loss_function)
 
-    def train(self, epochs=100, steps_per_epoch=20, checkpoint_path='./checkpoints'):
+    def train(self, epochs=100, checkpoint_path='./checkpoints'):
         callbacks = [
             tf.keras.callbacks.EarlyStopping(
                 monitor='loss', patience=10
@@ -44,12 +47,12 @@ class Trainer:
             tf.keras.callbacks.ModelCheckpoint(
                 filepath=os.path.join(
                     checkpoint_path, 'rfdnet_best.h5'
-                ), monitor='loss', mode='min', period=1,
+                ), monitor='loss', mode='min', save_freq=1,
                 save_best_only=True
             ), WandbCallback(),
             tf.keras.callbacks.LearningRateScheduler(lr_scheduler),
         ]
         self.model.fit(
-            self.train_dataset, epochs=epochs,
-            callbacks=callbacks, steps_per_epoch=steps_per_epoch
+            self.train_dataset, epochs=epochs, callbacks=callbacks,
+            steps_per_epoch=self.batch_size // epochs
         )
