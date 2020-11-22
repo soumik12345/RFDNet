@@ -24,11 +24,13 @@ class SRDataLoader:
         dataset_path = tf.keras.utils.get_file(
             file_name, dataset_url, extract=True
         )
-        return glob(
+        image_files = glob(
             '/'.join([i for i in dataset_path.split('/')[:-1]]) + '/{}/*'.format(
                 file_name.split('.')[0]
             )
-        )[:image_limiter]
+        )
+        image_files = image_files[:image_limiter] if image_limiter is not None else image_files
+        return image_files
 
     @staticmethod
     def read_image(image_file):

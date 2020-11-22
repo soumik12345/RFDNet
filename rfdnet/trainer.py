@@ -31,7 +31,8 @@ class Trainer:
     def compile(self, learning_rate=1e-3):
         self.build_model()
         self.loss_function = tf.keras.losses.MeanSquaredError()
-        self.optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+        self.optimizer = tf.keras.optimizers.Adam(
+            learning_rate=learning_rate, epsilon=1e-8)
         self.model.compile(optimizer=self.optimizer, loss=self.loss_function)
 
     def train(self, epochs=100, steps_per_epoch=20, checkpoint_path='./checkpoints'):
