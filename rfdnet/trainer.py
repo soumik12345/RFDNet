@@ -24,7 +24,7 @@ class Trainer:
             batch_size=batch_size, buffer_size=buffer_size
         )
         self.train_dataset = train_dataloader.make_dataset()
-        print('Number of Images:', len(train_dataloader))
+        # print('Number of Images:', len(train_dataloader))
         self.batch_size = batch_size
 
     def build_model(self, features=64, filters=64, scale_factor=3):
