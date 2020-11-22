@@ -34,7 +34,7 @@ class Trainer:
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
         self.model.compile(optimizer=self.optimizer, loss=self.loss_function)
 
-    def train(self, epochs=100, checkpoint_path='./checkpoints'):
+    def train(self, epochs=100, steps_per_epoch=20, checkpoint_path='./checkpoints'):
         callbacks = [
             tf.keras.callbacks.EarlyStopping(
                 monitor='loss', patience=10
@@ -47,5 +47,6 @@ class Trainer:
             ), WandbCallback()
         ]
         self.model.fit(
-            self.train_dataset, epochs=epochs, callbacks=callbacks
+            self.train_dataset, epochs=epochs,
+            callbacks=callbacks, steps_per_epoch=steps_per_epoch
         )
