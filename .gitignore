@@ -1,5 +1,9 @@
 venv/
 .idea/
+tests/__pycache__/
 rfdnet/__pycache__/
 rfdnet/model/__pycache__/
 test.py
+.DS_Store
+.coverage
+coverage.xml
