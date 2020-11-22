@@ -22,8 +22,15 @@ class Inferer:
         self._build_model(features, filters, scale_factor)
         self.model.load_weights(weights_path)
 
-    def infer(self, image_path):
+    def infer(self, image_path, image_resize_factor=1):
         original_image = Image.open(image_path)
+        width, height = original_image.size
+        original_image = original_image.resize(
+            (
+                width // image_resize_factor,
+                height // image_resize_factor
+            ),
+            Image.ANTIALIAS)
         image = tf.keras.preprocessing.image.img_to_array(original_image)
         image = image.astype('float32') / 255.0
         image = np.expand_dims(image, axis=0)
@@ -36,4 +43,4 @@ class Inferer:
         output_image = Image.fromarray(np.uint8(output_image))
         original_image = Image.fromarray(np.uint8(original_image))
         original_image_bilinear = original_image.resize(output_image.size, Image.BICUBIC)
-        return output_image, original_image_bilinear
+        return original_image_bilinear, output_image
