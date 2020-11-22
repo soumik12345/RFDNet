@@ -1,5 +1,5 @@
+from rfdnet import Trainer
 from rfdnet.utils import init_wandb
-from rfdnet import RFDNet, Trainer
 
 
 init_wandb(
