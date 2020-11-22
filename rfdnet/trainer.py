@@ -14,11 +14,11 @@ class Trainer:
         self.optimizer = None
 
     def build_dataset(
-            self, dataset_url=None, crop_size=300,
+            self, dataset_url=None, crop_size=300, image_limiter=800,
             downsample_factor=3, batch_size=8, buffer_size=1024):
         self.train_dataset = SRDataLoader(
             dataset_url=dataset_url, crop_size=crop_size,
-            downsample_factor=downsample_factor,
+            downsample_factor=downsample_factor, image_limiter=image_limiter,
             batch_size=batch_size, buffer_size=buffer_size
         ).make_dataset()
 

@@ -6,8 +6,10 @@ AUTOTUNE = tf.data.experimental.AUTOTUNE
 
 class SRDataLoader:
 
-    def __init__(self, dataset_url=None, crop_size=300, downsample_factor=3, batch_size=8, buffer_size=1024):
-        self.image_files = self.download_dataset(dataset_url)
+    def __init__(
+            self, dataset_url=None, image_limiter=100,
+            crop_size=300, downsample_factor=3, batch_size=8, buffer_size=1024):
+        self.image_files = self.download_dataset(dataset_url, image_limiter)
         self.crop_size = crop_size
         self.downsample_factor = downsample_factor
         self.batch_size = batch_size
@@ -17,7 +19,7 @@ class SRDataLoader:
         return len(self.image_files)
 
     @staticmethod
-    def download_dataset(dataset_url):
+    def download_dataset(dataset_url, image_limiter):
         file_name = dataset_url.split('/')[-1]
         dataset_path = tf.keras.utils.get_file(
             file_name, dataset_url, extract=True
@@ -26,7 +28,7 @@ class SRDataLoader:
             '/'.join([i for i in dataset_path.split('/')[:-1]]) + '/{}/*'.format(
                 file_name.split('.')[0]
             )
-        )
+        )[:image_limiter]
 
     @staticmethod
     def read_image(image_file):
