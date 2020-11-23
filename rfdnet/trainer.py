@@ -47,14 +47,16 @@ class Trainer:
                 learning_rate=learning_rate, epsilon=1e-8)
             self.model.compile(optimizer=self.optimizer, loss=self.loss_function)
 
-    def train(self, epochs=100, checkpoint_path='./checkpoints'):
+    def train(
+            self, epochs=100, steps_per_epoch=1e5,
+            checkpoint_path='./checkpoints', checkpoint_name='rfdnet_best.h5'):
         callbacks = [
             tf.keras.callbacks.EarlyStopping(
                 monitor='loss', patience=10
             ),
             tf.keras.callbacks.ModelCheckpoint(
                 filepath=os.path.join(
-                    checkpoint_path, 'rfdnet_best.h5'
+                    checkpoint_path, checkpoint_name
                 ), monitor='loss', mode='min', save_freq=1,
                 save_best_only=True, save_weights_only=True
             ), WandbCallback(),
@@ -64,6 +66,6 @@ class Trainer:
             )
         ]
         self.model.fit(
-            self.train_dataset, epochs=epochs, callbacks=callbacks,
-            steps_per_epoch=self.dataset_length // self.batch_size
+            self.train_dataset, epochs=epochs,
+            callbacks=callbacks, steps_per_epoch=steps_per_epoch
         )
