@@ -3,6 +3,7 @@ venv/
 tests/__pycache__/
 rfdnet/__pycache__/
 rfdnet/model/__pycache__/
+rfdnet/dataloader/__pycache__/
 test.py
 .DS_Store
 .coverage

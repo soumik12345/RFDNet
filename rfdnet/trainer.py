@@ -20,8 +20,8 @@ class Trainer:
             self.strategy = tf.distribute.MirroredStrategy()
 
     def build_dataset(
-            self, dataset_url=None, crop_size=300, image_limiter=None,
-            downsample_factor=3, batch_size=8, buffer_size=1024):
+            self, dataset_url=None, crop_size=64, image_limiter=None,
+            downsample_factor=2, batch_size=16, buffer_size=1024):
         with self.strategy.scope():
             train_dataloader = SRDataLoader(
                 dataset_url=dataset_url, crop_size=crop_size,

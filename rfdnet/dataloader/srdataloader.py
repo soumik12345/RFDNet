@@ -1,5 +1,6 @@
 from glob import glob
 import tensorflow as tf
+from .augmentations import horizontal_flips, rotate_90
 
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
@@ -8,7 +9,7 @@ class SRDataLoader:
 
     def __init__(
             self, dataset_url=None, image_limiter=100,
-            crop_size=300, downsample_factor=3, batch_size=8, buffer_size=1024):
+            crop_size=64, downsample_factor=2, batch_size=16, buffer_size=1024):
         self.image_files = self.download_dataset(dataset_url, image_limiter)
         self.crop_size = crop_size
         self.downsample_factor = downsample_factor
@@ -51,6 +52,8 @@ class SRDataLoader:
                 self.crop_size // self.downsample_factor
             ], 'bicubic'
         )
+        lr, hr = horizontal_flips(lr, hr)
+        lr, hr = rotate_90(lr, hr)
         hr = hr / 255.0
         lr = lr / 255.0
         return lr, hr
