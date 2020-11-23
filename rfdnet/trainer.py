@@ -33,15 +33,15 @@ class Trainer:
             self.batch_size = batch_size
             print('Number of Images:', self.dataset_length)
 
-    def build_model(self, features=64, filters=64, scale_factor=3):
+    def build_model(self, features=64, filters=64, scale_factor=2):
         self.model = RFDNet(
             features=features, filters=filters,
             scale_factor=scale_factor
         )
 
-    def compile(self, learning_rate=1e-3):
+    def compile(self, features=64, filters=64, scale_factor=2, learning_rate=1e-3):
         with self.strategy.scope():
-            self.build_model()
+            self.build_model(features, filters, scale_factor)
             self.loss_function = tf.keras.losses.MeanSquaredError()
             self.optimizer = tf.keras.optimizers.Adam(
                 learning_rate=learning_rate, epsilon=1e-8)
