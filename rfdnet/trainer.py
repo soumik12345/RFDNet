@@ -60,10 +60,10 @@ class Trainer:
                 ), monitor='loss', mode='min', save_freq=1,
                 save_best_only=True, save_weights_only=True
             ), WandbCallback(),
-            # tf.keras.callbacks.LearningRateScheduler(lr_scheduler),
-            tf.keras.callbacks.ReduceLROnPlateau(
-                monitor='loss', factor=0.5, patience=5
-            )
+            tf.keras.callbacks.LearningRateScheduler(lr_scheduler),
+            # tf.keras.callbacks.ReduceLROnPlateau(
+            #     monitor='loss', factor=0.5, patience=5
+            # )
         ]
         self.model.fit(
             self.train_dataset, epochs=epochs,
