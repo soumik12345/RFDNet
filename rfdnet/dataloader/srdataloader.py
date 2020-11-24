@@ -52,8 +52,8 @@ class SRDataLoader:
                 self.crop_size // self.downsample_factor
             ], 'bicubic'
         )
-        lr, hr = horizontal_flips(lr, hr)
-        lr, hr = rotate_90(lr, hr)
+        # lr, hr = horizontal_flips(lr, hr)
+        # lr, hr = rotate_90(lr, hr)
         hr = hr / 255.0
         lr = lr / 255.0
         return lr, hr

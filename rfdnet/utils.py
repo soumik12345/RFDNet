@@ -15,6 +15,6 @@ def init_wandb(project_name, experiment_name, wandb_api_key):
 
 
 def lr_scheduler(epoch, lr):
-    if epoch % 20:
+    if epoch % 2:
         return lr / 2.0
     return lr
